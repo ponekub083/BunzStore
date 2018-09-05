@@ -1,17 +1,8 @@
 [buildpack]
-name = "Gradle"
+name = "PHP"
 
-  [publish.Ignore]
-  files = [
-    "etc/",
-    "spec/",
-    "test/",
-    "vendor/",
-    ".gitignore",
-    ".github/",
-    ".travis.yml",
-    "circle.yml",
-    "hatchet.json",
-    "Gemfile",
-    "Gemfile.lock",
-]
+	[publish.Ignore]
+	files = [
+		".gitignore",
+		".github/"
+	]

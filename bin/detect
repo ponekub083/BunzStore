@@ -1,16 +1,29 @@
 #!/usr/bin/env bash
-# bin/detect <build-dir>
 
-if [ -f $1/gradlew ]; then
-  echo "Gradle" && exit 0
+# convenience functions
+source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
-# Detect these Gradle specific files, so we can fail with a message
-# asking the user to enable the Gradle Wrapper for their project.
-elif [ -f $1/build.gradle ]; then
-  echo "Gradle" && exit 0
-elif [ -f $1/settings.gradle ]; then
-  echo "Gradle" && exit 0
+if [[ -f "$1/composer.json" || -f "$1/index.php" ]]; then
+	echo "PHP" && exit 0
 else
-  (>&2 echo "Could not find a 'gradlew' script or a 'build.gradle' file! Please check that they exist and are commited to Git.")
-  exit 1
+	error <<-EOF
+		Application not supported by this buildpack!
+		
+		The 'heroku/php' buildpack is set on this application, but was
+		unable to detect a PHP codebase.
+		
+		A PHP app on Heroku requires a 'composer.json' at the root of
+		the directory structure, or an 'index.php' for legacy behavior.
+		
+		If you are trying to deploy a PHP application, ensure that one
+		of these files is present at the top level directory.
+		
+		If you are trying to deploy an application written in another
+		language, you need to change the list of buildpacks set on your
+		Heroku app using the 'heroku buildpacks' command.
+		
+		For more information, refer to the following documentation:
+		https://devcenter.heroku.com/articles/buildpacks
+		https://devcenter.heroku.com/articles/php-support#activation
+	EOF
 fi
